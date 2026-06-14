@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>WordsFinder</title>
+  <link rel="stylesheet" href="css\mycss.css">
+  <script type="text/javascript" src="js/general.js"></script>
+  <script type="text/javascript" src="js/api.js"></script>
+  <style>
+    html,
+    body {
+    background-color: #f2f1e8;
+    font-family: 'Georgia', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    }
+
+    body {
+    display: flex;
+    align-items: center;
+    width: 800px;
+    height: 400px;
+    display: flex;
+    background-color: #f2f1e8;
+    }
+
+    .form-signin {
+      max-width: 400px;
+      padding: 15px;
+      margin: auto;
+    }
+
+    .form-signin .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
+</head>
+<body>
+    <h1>新規登録フォーム 📖</h1>
+    <main class="form-signin w-100 m-auto">
+        <form id="myForm" onsubmit="register">
+          <h1 class="h3 mb-3 fw-normal text-center">アカウントの作成</h1>
+      
+          <div class="form-floating">
+            <input type="text" class="form-control" id="nickname" placeholder="わーふぁ太郎"name="nickname">
+            <label for="nickname">ニックネーム</label>
+          </div>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
+            <label for="email">メールアドレス</label>
+          </div>
+          <div class="form-floating">
+            <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+            <label for="Password">パスワード</label>
+          </div>
+          <div id="megs"></div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">新規登録</button>
+        </form>
+      </main>
+    <div class="pagemover">
+      <a href="index.html"><img src="assets\images\icon_1.png" ></a>
+      <a href="wordking.html"><img src="assets\images\icon_4.png"></a>
+      <a href="mypage.html"><img src="assets\images\icon_5.png"></a>
+    </div>
+  </body>
+  <script>
+    if (checkLogin()) {
+    location.href = "personalpage.html"
+  }
+
+  const register = (event) => {
+    event.preventDefault()
+    console.log("register")
+    // フォームの値を取得
+    // .trim()で前後の空白を削除
+    const nickname = document.getElementById('nickname').value.trim()
+    const email = document.getElementById('email').value.trim()
+    const password = document.getElementById('password').value.trim()
+
+    // メッセージを表示するための要素を取得
+    const megsBox = document.getElementById('megs')
+
+    // 全ての項目が入力されているかチェック
+    if (nickname === '' || email === '' || password === '') {
+      megsBox.innerHTML = '全ての項目を入力してください'
+      return
+    }
+
+    // API用データを作成する
+    const data = {
+      "email": email,
+      "nickname": nickname,
+      "password": password
+    }
+    console.log(data);
+    // API操作を呼び出す
+    signUpApi(data)
+      .then((res) => {
+        megsBox.innerHTML = '新規登録に成功しました <a href="login.html">ログインページへ</a>'
+      })
+      .catch((error) => {
+        console.log(error)
+        megsBox.innerHTML = error.message
+        throw error
+      })
+  }
+
+  document.getElementById("myForm").addEventListener("submit", register)
+  </script>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>WordsFinder</title>
+  <link rel="stylesheet" href="css\mycss.css">
+  <script type="text/javascript" src="js/general.js"></script>
+  <script type="text/javascript" src="js/api.js"></script>
+</head>
+<body>
+
+    <h1>単語テスト 📖</h1>
+    <div id="megs"></div>
+    <div>
+      <input type="text" id="wordInput" placeholder="単語を入力">
+      <button onclick="searchMeaning()">検索</button>
+    </div>
+  
+    <div class="book">
+      <div class="page" id="leftPage">ここに単語が表示されます</div>
+      <div class="page right-page" id="rightPage">意味はこちらに表示されます</div>
+    </div>
+
+    <div class="pagemover">
+      <a href="index.html"><img src="assets\images\icon_1.png" ></a>
+      <a href="wordking.html"><img src="assets\images\icon_4.png"></a>
+      <a href="mypage.html"><img src="assets\images\icon_5.png"></a>
+    </div>
+  
+    
+  </body>
+  <script>
+    const megsbox = document.getElementById('megs');
+
+    if (!checkLogin()) {
+    megs.innerHTML = '⚠ログインされていません！データが保存されません！⚠'
+  }
+  </script>
+</html>

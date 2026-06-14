@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>WordsFinder</title>
+  <link rel="stylesheet" href="css\mycss.css">
+  <script type="text/javascript" src="js/general.js"></script>
+  <script type="text/javascript" src="js/api.js"></script>
+  <style>
+    html,
+    body {
+    background-color: #f2f1e8;
+    font-family: 'Georgia', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    }
+
+    body {
+    display: flex;
+    align-items: center;
+    width: 800px;
+    height: 400px;
+    display: flex;
+    background-color: #f2f1e8;
+    }
+
+    .form-signin {
+      max-width: 400px;
+      padding: 15px;
+      margin: auto;
+    }
+
+    .form-signin .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+    <h1>マイページ</h1>
+    <div id="megs"></div>
+    
+    <div>
+      <div class="login-container">
+        <a href="login.html">
+            <button>ログインはこちら</button>
+        </a>
+        <br /><br />
+        <a href="signup.html">
+            <button>新規登録はこちら</button>
+        </a>
+        <br /><br />
+    </div>
+
+
+  <div class="pagemover">
+      <a href="index.html"><img src="assets\images\icon_1.png" ></a>
+      <a href="wordking.html"><img src="assets\images\icon_4.png"></a>
+      <a href="mypage.html"><img src="assets\images\icon_5.png"></a>
+    </div>
+
+</body>
+<script>
+    const megsbox = document.getElementById('megs');
+
+    if (checkLogin()) {
+    location.href = 'personalpage.html'
+  }
+    if (!checkLogin()) {
+    megs.innerHTML = '⚠ログインされていません！⚠'
+  }
+
+</script>
+
+
+</html>

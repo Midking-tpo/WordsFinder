@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>WordsFinder</title>
+  <link rel="stylesheet" href="css\mycss.css">
+  <script type="text/javascript" src="js/general.js"></script>
+  <script type="text/javascript" src="js/api.js"></script>
+</head>
+<body>
+
+  <h1>単語王メニュー 📖</h1>
+  <div id="megs"></div>
+  <div>
+    <a href="index.html">
+      <button>単語を検索しに行く</button>
+    </a>
+  </div>
+
+  <div>
+    <h1 id="welcome"></h1>
+  </div>
+
+  <div id="words-list">
+    <!--ここに単語がいっぱいはいる-->
+  </div>
+
+  <div class="pagemover">
+    <a href="index.html"><img src="assets\images\icon_1.png" ></a>
+    <a href="wordking.html"><img src="assets\images\icon_4.png"></a>
+    <a href="mypage.html"><img src="assets\images\icon_5.png"></a>
+  </div>
+
+  
+</body>
+<script>
+    const megsbox = document.getElementById('megs');
+
+    if (!checkLogin()) {
+    megs.innerHTML = '⚠ログインされていません！データが保存されません！⚠'
+  }
+
+  getMeApi().then(data => {
+    console.log("data:",data)
+    const welcomeH1 = document.getElementById('welcome')
+    welcomeH1.innerText = `${data.nickname}さんの発見した単語`
+  })
+
+  getYourWordsApi()
+   .then((data) => {
+     const wordList = document.getElementById('words-list')
+     data.forEach(word => {
+      const wordDiv = document.createElement('div')
+      wordDiv.className = 'word-card'  // クラス名を追加
+      wordDiv.innerHTML = `
+        <div class="word-en">英単語：${word.enmean}</div>
+        <div class="word-jp">日本語：${word.jpmean}</div>
+      `
+      wordList.appendChild(wordDiv)
+
+     })
+   })
+</script>
+</html>

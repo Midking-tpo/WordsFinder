@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>WordsFinder</title>
+  <link rel="stylesheet" href="css\mycss.css">
+  <script type="text/javascript" src="js/general.js"></script>
+  <script type="text/javascript" src="js/api.js"></script>
+  <style>
+    html,
+    body {
+    background-color: #f2f1e8;
+    font-family: 'Georgia', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    }
+
+    body {
+    display: flex;
+    align-items: center;
+    width: 800px;
+    height: 400px;
+    display: flex;
+    background-color: #f2f1e8;
+    }
+
+    .form-signin {
+      max-width: 400px;
+      padding: 15px;
+      margin: auto;
+    }
+
+    .form-signin .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container">
+    <h1>ログイン</h1>
+    <div>
+      <div id="megs" style="color: red;">&nbsp;</div>
+      <label for="email">メールアドレス:</label>
+      <input type="email" id="email" name="email" required>
+      <br /><br />
+      <label for="password">パスワード:</label>
+      <input type="password" id="password" name="password" required>
+      <br /><br />
+      <button onclick="login()">ログイン</button>
+      <a href="signup.html">
+        <button>新規登録はこちら</button>
+      </a>
+      <div id="megs"></div>
+    </div>
+
+  </div>
+
+  <div class="pagemover">
+      <a href="index.html"><img src="assets\images\icon_1.png" ></a>
+      <a href="wordking.html"><img src="assets\images\icon_4.png"></a>
+      <a href="mypage.html"><img src="assets\images\icon_5.png"></a>
+    </div>
+
+</body>
+
+<script>
+  if (checkLogin()) {
+    location.href = "personalpage.html"
+  }
+
+  const login = () => {
+    // フォームの値を取得
+    // .trim()で前後の空白を削除
+    const email = document.getElementById('email').value.trim()
+    const password = document.getElementById('password').value.trim()
+
+    // メッセージを表示するための要素を取得
+    const megsBox = document.getElementById('megs')
+
+    // 全ての項目が入力されているかチェック
+    if (email === '' || password === '') {
+      megsBox.innerText = '全ての項目を入力してください'
+      return
+    }
+
+    // APIにリクエストを送信
+    loginApi(email, password)
+      .then((data) => {
+        alert('ログインが完了しました、メインページに移動します')
+        location.href = '/index.html'
+      })
+      .catch((error) => {
+        megsBox.innerText = error.message
+        throw error
+      })
+  }
+</script>
+
+</html>
