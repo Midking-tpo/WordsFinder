@@ -2,6 +2,13 @@
 
 学校で途中まで作成したこのプロジェクトを、就活ポートフォリオとして整備するために改修しました。
 
+### データベーステーブルの不足を修正
+- `/words` への保存・取得が500エラーで失敗
+- サーバーログを確認すると `Table 'demo.words' doesn't exist` というエラー
+  - `init.sql` には `users`・`tasks`・`dones` テーブルしか定義されておらず、`words` テーブルの定義が漏れていた（開発途中で「Todoアプリ」から「単語学習アプリ」への方針転換の影響と思われる）
+  - `api/cruds/words.py` で使われているカラム（`id`, `userid`, `enmean`, `jpmean`）を確認し、`init.sql` に `CREATE TABLE words` を追記して解決
+  - 既存のDBボリュームには反映されないため、`docker-compose down -v` でボリュームを削除してから再構築する必要があった
+
 ### 環境の再構築
 - Docker Desktop未インストールのMacに新規導入
 - `Dockerfile.api` のベースイメージが `python:3.11-slim-buster` のままだった

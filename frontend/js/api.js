@@ -50,7 +50,7 @@ const loginApi = (email,password) => {
     const url = `${API_HOST}/token`
     return fetch(url,{
         method: 'POST',
-        cledential: 'include',
+        credentials: 'include',
         headers:{
             'Content-Type': 'application/x-www-form-urlencoded',
         },
