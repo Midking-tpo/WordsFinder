@@ -22,8 +22,10 @@ async def translate(request: Request):
     try:
         response = requests.post(
             DEEPL_API_URL,
+            headers={
+                "Authorization": f"DeepL-Auth-Key {DEEPL_API_KEY}"
+            },
             data={
-                "auth_key": DEEPL_API_KEY,
                 "text": text_to_translate,
                 "target_lang": "JA"
             }

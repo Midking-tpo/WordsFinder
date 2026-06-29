@@ -8,8 +8,7 @@ from api.routers import  words
 from api.routers import  translate
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
+app.mount("/static", StaticFiles(directory="api/static"), name="static")
 
 
     

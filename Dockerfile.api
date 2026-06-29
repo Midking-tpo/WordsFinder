@@ -1,7 +1,7 @@
 # Base on https://github.com/orgs/python-poetry/discussions/1879#discussioncomment-7284113
 
 # python3.11のイメージをダウンロード
-FROM python:3.11-slim-buster
+FROM python:3.11-slim-bookworm
 
 RUN apt-get update && apt-get install -y curl
 

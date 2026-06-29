@@ -1,84 +1,29 @@
-# Docker, FastAPI, MySQLを用いたTODOアプリのサンプル
-## 前提条件
-Dockerのインストールを完了させておくこと
+## 改修記録（2026年6月）
 
-- [Windows10の場合](docs/install-docker-windows10.md)
-- [Windows11の場合](docs/install-docker-windows11.md)
-- [Macの場合](docs/install-docker-mac.md)
+学校で途中まで作成したこのプロジェクトを、就活ポートフォリオとして整備するために改修しました。
 
+### 環境の再構築
+- Docker Desktop未インストールのMacに新規導入
+- `Dockerfile.api` のベースイメージが `python:3.11-slim-buster` のままだった
+  - Debian "buster" はサポート終了（EOL）しており、パッケージ取得元のサーバーが閉鎖済みで `apt-get` が404エラーで失敗
+  - `python:3.11-slim-bookworm`（サポート中のバージョン）に変更して解決
 
-## 起動方法
-1. 以下のコマンドを実行してprjのディレクトリに移動します。
-```bash 
-cd
-cd Desktop
-cd myj-fastapi-web-app-main
-```
+### 静的ファイルエラーの修正
+- `api/main.py` で `StaticFiles(directory="static")` としていたため、Docker実行時の作業ディレクトリ（`/src`）から見て `static` フォルダが見つからずエラー
+  - `directory="api/static"` に修正し、正しい相対パスを指定
 
-2. 以下のコマンドを実行してprjを起動します。
-```bash
-docker-compose up
-```
-※ ⚠️ ※ **注意** 初回はかなり時間がかかるので，下記のログが出力されるまではしばらく待機
-<img width="800" alt="cmd.png" src="docs/images/docker-first-up-output.png">
+### DeepL翻訳機能の修正
+- 翻訳リクエストが403エラーで失敗
+  - 当初はAPIキーの期限切れを疑い、新しいキーを発行
+  - それでも解決せず、`curl` で直接APIを叩いて検証した結果、**DeepLの認証方式自体が変更されていた**ことが判明
+  - 旧方式：リクエストボディに `auth_key` を含める
+  - 新方式：リクエストヘッダーに `Authorization: DeepL-Auth-Key <key>` を含める
+  - `api/routers/translate.py` を新方式に対応させて解決
 
-### アクセス方法
-すると、以下のURLでアクセスできます。
-- API: http://localhost:8000/docs
-- フロントエンド: http://localhost:3000
+### 学んだこと
+- 数年前に作られたDocker環境は、ベースイメージのサポート終了や外部APIの仕様変更により、当時のままでは動かなくなることがある
+- エラーメッセージを鵜呑みにせず、`curl` などでAPIに直接アクセスして検証することで、問題を切り分けられる
+- CORSエラーとして表示されていても、実際の原因はサーバー側の別のエラー（500エラーなど）であることがある
 
-### DBの内部を直接確認したい、操作したい
-こちらのドキュメント[how-to-use-vscode-mysql-plugin.md](docs/how-to-use-vscode-mysql-plugin.md)を参照してください。
-
-### 停止
-
-docker-compose up コマンドを実行したウィンドウで `Ctrl + c`。
-
-## 開発の進め方
-### api
-基本的には`api`ディレクトリのファイルを編集して開発を進めていきます。
-- `api`ディレクトリの構成は以下の通りです。
-  - `api`
-    - `routers/*`: APIのエンドポイントを定義するファイルを置きます。
-    - `cruds/*`: DBの操作を行うファイルを置きます。
-    - `db.py`: DBの接続情報を定義するファイルを置きます。
-
-### DBのテーブル構造の変更について
-vscodeの拡張機能で構造変更を行う、こちらのドキュメント[how-to-use-vscode-mysql-plugin.md](docs/how-to-use-vscode-mysql-plugin.md)を参照してください。
-
-### frontend
-基本的には`frontend`ディレクトリのファイルを編集して開発を進めていきます。
-- `frontend`ディレクトリの構成は以下の通りです。
-  - `frontend`
-      - `css/*`: CSSファイルを置きます。
-      - `js/*`: JavaScriptファイルを置きます。
-        - `api.js`: APIを呼び出す関数を定義するファイルを置きます。
-      - `*****.html`: ページごとのHTMLファイルを置きます。
-
-
-## よく使うコマンドについて
-コピペって使ってください。
-
-### プロジェクトの起動
-1. `cd`
-2. `cd Desktop`
-3. `cd myj-fastapi-web-app-main`
-4. `docker-compose up`
-
-### 新しいパッケージの追加
-macの場合: `sh script/add-package.sh <パッケージ名>`
-
-windowsの場合: `script\add-package.bat <パッケージ名>`
-
-## FQA
-## Q1: Windowsにおいて、`cd Desktop`でエラーが出る
-
-Windowsの場合、OneDriveの関係でDesktopが存在しない場合があります。
-
-その場合、`cd OneDrive`で移動して`dir`でディレクトリの一覧を確認しながら、`Desktop`か`デスクトップ`に移動してください。
-
-
-## 備考
-prj全体の構造は[`docs/prj-overview.md`](docs/prj-overview.md)を参照してください。
-
-TASAとこのでもアプリ自体を開発する人は必ず読んでください。
+### 既知の残課題
+- `/words`（単語保存機能）でログイン認証に関連するエラーが残っている（次回対応予定）
